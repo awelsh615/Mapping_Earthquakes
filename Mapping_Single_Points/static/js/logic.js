@@ -4,8 +4,16 @@ console.log("working");
 // Create the map object with a center and zoom level.
 let map = L.map('mapid').setView([40.7, -94.5], 4);
 
+//  Add a marker to the map for my house (832 Overhills Drive)
+// let marker = L.marker([36.229980, -86.571770]).addTo(map);
+L.circle([36.229980, -86.571770], {
+    radius: 200,
+    color: "black",
+    fillcolor: '#ffff00'
+}).addTo(map);
+
 // We create the tile layer that will be the background of our map.
-let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
