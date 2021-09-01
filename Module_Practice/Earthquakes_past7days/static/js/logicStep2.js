@@ -32,34 +32,3 @@ let map = L.map('mapid', {
 L.control.layers(baseMaps).addTo(map);
 
 
-// Accessing the earthquake data GeoJSON URL.
-let earthquakeData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
-// Grabbing our GeoJSON data.
-d3.json(earthquakeData).then(function(data) {
-  console.log(data);
-  // This function determines the radius of the earthquake marker based on its magnitude.
-  // Earthquakes with a magnitude of 0 will be plotted with a radius of 1.
-  function getRadius(magnitude) {
-    if (magnitude === 0) {
-      return 1;
-    }
-    return magnitude * 4;
-}
-// Creating a GeoJSON layer with the retrieved data.
-  // L.geoJson(data).addTo(map);
-  // Code for adding markers
-  L.geoJson(data, {
-    pointToLayer: function(feature,latlng) {
-      return L.circleMarker(latlng);
-    },
-    style: {
-      opacity: 1,
-      fillOpacity: 1,
-      fillColor: "#ffae42",
-      color: "#000000", 
-      radius: getRadius(),
-      stroke: true,
-      weight: 0.5 
-    }
-  }).addTo(map)
-});
