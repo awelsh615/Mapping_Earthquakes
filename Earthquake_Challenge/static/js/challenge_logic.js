@@ -15,6 +15,13 @@ let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/sate
 	accessToken: API_KEY
 });
 
+// Create a third tile layer that will be the background of our map.
+let night = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-night-v1/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+	maxZoom: 18,
+	accessToken: API_KEY
+});
+
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
 	center: [40.7, -94.5],
@@ -25,7 +32,8 @@ let map = L.map('mapid', {
 // Create a base layer that holds all three maps.
 let baseMaps = {
   "Streets": streets,
-  "Satellite": satelliteStreets
+  "Satellite": satelliteStreets,
+  "Night": night
 };
 
 // 1. Add a 2nd layer group for the tectonic plate data.
@@ -36,8 +44,8 @@ let majorQuakes = new L.LayerGroup();
 
 // 2. Add a reference to the tectonic plates group to the overlays object.
 let overlays = {
-  "Earthquakes": allEarthquakes,
-  "Tectonic Plates": tectonicPlates,
+  "All Earthquakes": allEarthquakes,
+  "Fault Lines": tectonicPlates,
   "Major Earthquakes": majorQuakes
 };
 
@@ -65,6 +73,9 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
 
   // This function determines the color of the marker based on the magnitude of the earthquake.
   function getColor(magnitude) {
+    if (magnitude >6) {
+      return "#800080"
+    }
     if (magnitude > 5) {
       return "#ea2c2c";
     }
@@ -132,9 +143,9 @@ d3.json(majorData).then(function(data) {
       return "#800080";
     }
     if (magnitude > 5) {
-      return "#00008B";
+      return "#ea2c2c";
     }
-    return "#0096FF";
+    return "#ea822c";
   }
   // 4. Use the same style as the earthquake data.
   L.geoJson(data, {
@@ -168,14 +179,15 @@ let legend = L.control({
 legend.onAdd = function() {
   let div = L.DomUtil.create("div", "info legend");
 
-  const magnitudes = [0, 1, 2, 3, 4, 5];
+  const magnitudes = [0, 1, 2, 3, 4, 5, 6];
   const colors = [
     "#98ee00",
     "#d4ee00",
     "#eecc00",
     "#ee9c00",
     "#ea822c",
-    "#ea2c2c"
+    "#ea2c2c",
+    "#800080"
   ];
 
 // Looping through our intervals to generate a label with a colored square for each interval.
@@ -203,7 +215,7 @@ legend.onAdd = function() {
         layer.bindPopup("<h2>" + "Fault Line: " + feature.properties.Name)
       },
       style: {
-        color: "red", weight: 3
+        color: "blue", weight: 2
       }
     }).addTo(tectonicPlates)
 
