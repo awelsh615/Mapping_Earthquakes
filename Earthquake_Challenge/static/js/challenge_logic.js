@@ -45,8 +45,9 @@ let majorQuakes = new L.LayerGroup();
 // 2. Add a reference to the tectonic plates group to the overlays object.
 let overlays = {
   "All Earthquakes": allEarthquakes,
-  "Fault Lines": tectonicPlates,
-  "Major Earthquakes": majorQuakes
+  "Major Earthquakes (mag 4.5+)": majorQuakes,
+  "Fault Lines": tectonicPlates
+ 
 };
 
 // Then we add a control to the map that will allow the user to change which
@@ -54,7 +55,7 @@ let overlays = {
 L.control.layers(baseMaps, overlays, {collapsed: false}).addTo(map);
 
 // Retrieve the earthquake GeoJSON data.
-d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson").then(function(data) {
 
   // This function returns the style data for each of the earthquakes we plot on
   // the map. We pass the magnitude of the earthquake into two separate functions
@@ -125,7 +126,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   // --------------------------------------------------------------------------------
 // Adding Major Earthquake Data
 // 3. Retrieve the major earthquake GeoJSON data >4.5 mag for the week.
-let majorData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson";
+let majorData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
 d3.json(majorData).then(function(data) {
   function styleInfoMajor(feature) {
     return {
