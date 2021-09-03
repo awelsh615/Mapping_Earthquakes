@@ -18,3 +18,5 @@ I chose, instead to create a map object of all earthquakes in the last 7 days, a
 
 ## Conclusion
 I really enjoyed this project.  I added a fourth tilelayer to the Map, and added an information box at the top of the page with information on the purpose of the map.
+
+I tried deploying this 'site' to heroku, but got a little confused.  Instead I created a github repository with only the challenge files and created a github page: https://awelsh615.github.io/Mapping_Earthquakes_heroku/.
