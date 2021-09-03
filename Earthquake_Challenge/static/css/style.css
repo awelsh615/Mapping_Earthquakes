@@ -23,7 +23,8 @@ body,
 }
 
 .myDiv {
-  border: 5px outset #ADDFFF;
-  background-color: #FFFACD;
+  border: 5px outset #E7F6F7;
+  background-color: darkblue;
   text-align: center;
+  color: #E7F6F7;
 }

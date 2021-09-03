@@ -22,15 +22,23 @@ let night = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-nigh
 	accessToken: API_KEY
 });
 
+// Create a fourth tile layer that will be the background of our map.
+let light = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+	maxZoom: 18,
+	accessToken: API_KEY
+});
+
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
 	center: [40.7, -94.5],
 	zoom: 3,
-	layers: [streets]
+	layers: [light]
 });
 
 // Create a base layer that holds all three maps.
 let baseMaps = {
+  "Light": light,
   "Streets": streets,
   "Satellite": satelliteStreets,
   "Night": night
@@ -44,8 +52,8 @@ let majorQuakes = new L.LayerGroup();
 
 // 2. Add a reference to the tectonic plates group to the overlays object.
 let overlays = {
-  "All Earthquakes": allEarthquakes,
-  "Major Earthquakes (mag 4.5+)": majorQuakes,
+  "All Earthquakes in the last 7 Days": allEarthquakes,
+  "Significant Earthquakes in the last 30 Days": majorQuakes,
   "Fault Lines": tectonicPlates
  
 };
@@ -55,7 +63,7 @@ let overlays = {
 L.control.layers(baseMaps, overlays, {collapsed: false}).addTo(map);
 
 // Retrieve the earthquake GeoJSON data.
-d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson").then(function(data) {
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
 
   // This function returns the style data for each of the earthquakes we plot on
   // the map. We pass the magnitude of the earthquake into two separate functions
@@ -126,7 +134,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geo
   // --------------------------------------------------------------------------------
 // Adding Major Earthquake Data
 // 3. Retrieve the major earthquake GeoJSON data >4.5 mag for the week.
-let majorData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
+let majorData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson";
 d3.json(majorData).then(function(data) {
   function styleInfoMajor(feature) {
     return {
